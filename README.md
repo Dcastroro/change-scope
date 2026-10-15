@@ -13,7 +13,7 @@ the application that depends on both. An unrelated documentation app can wait.
 Change Scope makes that selection explicit, with dependency reasons and bounded
 CI shards. Unknown ownership selects everything by default.
 
-No service account, API key, runtime dependency or repository command execution.
+No service account, API key, third-party npm package or repository script execution.
 The planner runs locally; Git mode uses bounded, read-only Git subprocesses.
 
 ```mermaid
