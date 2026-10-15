@@ -1,0 +1,23 @@
+{
+  "name": "change-scope",
+  "version": "0.1.0",
+  "description": "Plan affected monorepo projects from local Git changes with conservative fallbacks, dependency propagation and bounded CI matrices.",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "author": "David Castro",
+  "engines": { "node": ">=22" },
+  "bin": { "change-scope": "bin/change-scope.mjs" },
+  "exports": "./src/index.mjs",
+  "repository": { "type": "git", "url": "git+https://github.com/Dcastroro/change-scope.git" },
+  "homepage": "https://github.com/Dcastroro/change-scope#readme",
+  "bugs": { "url": "https://github.com/Dcastroro/change-scope/issues" },
+  "scripts": {
+    "test": "node --test",
+    "check": "node scripts/check.mjs",
+    "demo": "node bin/change-scope.mjs plan --config examples/monorepo.json --changes examples/changes.json --format json",
+    "repo:check": "node scripts/repository-check.mjs",
+    "release:build": "node scripts/build-release.mjs"
+  },
+  "keywords": ["monorepo", "affected", "ci", "automation", "developer-tools", "git", "dependency-graph"]
+}

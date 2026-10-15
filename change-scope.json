@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "projects": [
+    { "id": "core", "root": "src" },
+    { "id": "cli", "root": "bin", "dependsOn": ["core"] },
+    { "id": "tests", "root": "test", "dependsOn": ["core", "cli"] },
+    { "id": "tooling", "root": "scripts" }
+  ],
+  "ignoredInputs": ["docs/", "README.md", "CHANGELOG.md", "RELEASING.md", "CONTRIBUTING.md", "SECURITY.md", "VALIDATION.md", "LICENSE"]
+}

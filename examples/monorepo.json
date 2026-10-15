@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "projects": [
+    { "id": "core", "root": "packages/core", "inputs": ["tooling/typescript/"] },
+    { "id": "ui", "root": "packages/ui", "dependsOn": ["core"] },
+    { "id": "api", "root": "apps/api", "dependsOn": ["core"] },
+    { "id": "web", "root": "apps/web", "dependsOn": ["ui", "api"] },
+    { "id": "docs", "root": "apps/docs" }
+  ],
+  "globalInputs": ["tooling/build/"],
+  "ignoredInputs": ["docs/", "README.md"],
+  "unmapped": "all"
+}
