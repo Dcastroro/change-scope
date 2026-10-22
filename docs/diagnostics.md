@@ -8,7 +8,7 @@ failure returns `2` and a JSON object such as:
 {"version":1,"ok":false,"error":{"code":"merge-base-unavailable"}}
 ```
 
-Errors use JSON even in text/matrix mode. Consumers must check process exit
+Errors use JSON even in text/matrix/summary mode. Consumers must check process exit
 status before reading a successful plan or matrix. CLI diagnostics suppress
 source values, filenames, ref strings, filesystem paths and Git stderr.
 
