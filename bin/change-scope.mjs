@@ -9,6 +9,7 @@ const VERSION = JSON.parse(readFileSync(new URL('../package.json', import.meta.u
 const HELP = `Change Scope ${VERSION}
 Plan affected monorepo projects without running their commands.
 
+  change-scope validate [--config change-scope.json]
   change-scope plan --base origin/main [--head HEAD] [--repo .]
   change-scope plan --config examples/monorepo.json --changes examples/changes.json
 
@@ -21,6 +22,7 @@ Options:
   --version                 Show version
 
 Exit codes: 0 success, 1 affected (opt-in), 2 invalid input or unavailable Git objects.
+Validate reads only the local config, accepts only --config, and returns JSON counts.
 `;
 
 function readJson(path, limit) {
@@ -49,7 +51,8 @@ try {
   if (args.length === 1 && args[0] === '--version') console.log(VERSION);
   else if (args.length === 0 || (args.length === 1 && args[0] === '--help')) process.stdout.write(HELP);
   else {
-    if (args.shift() !== 'plan') fail('usage');
+    const command = args.shift();
+    if (!['plan', 'validate'].includes(command)) fail('usage');
     const options = new Map();
     for (let index = 0; index < args.length; index += 1) {
       const key = args[index];
@@ -65,14 +68,18 @@ try {
     if (!['text', 'json', 'matrix'].includes(format)) fail('usage');
     const configPath = options.get('--config') ?? 'change-scope.json';
     let plan;
-    if (options.has('--changes')) {
+    if (command === 'validate') {
+      if ([...options.keys()].some(key => key !== '--config')) fail('usage');
+      plan = planImpact(readJson(configPath, LIMITS.configBytes), []);
+    } else if (options.has('--changes')) {
       if (['--base', '--head', '--repo', '--comparison'].some(key => options.has(key))) fail('usage');
       plan = planImpact(readJson(configPath, LIMITS.configBytes), readJson(options.get('--changes'), LIMITS.changeBytes));
     } else {
       if (!options.has('--base')) fail('usage');
       plan = planGit({ repo: options.get('--repo') ?? '.', base: options.get('--base'), head: options.get('--head') ?? 'HEAD', configPath, comparison: options.get('--comparison') ?? 'merge-base' });
     }
-    if (format === 'json') console.log(JSON.stringify(plan, null, 2));
+    if (command === 'validate') console.log(JSON.stringify({ version: 1, valid: true, projects: plan.totals.projects }));
+    else if (format === 'json') console.log(JSON.stringify(plan, null, 2));
     else if (format === 'matrix') console.log(JSON.stringify(plan.matrix));
     else {
       console.log(`Change Scope: ${plan.mode}; ${plan.totals.selected}/${plan.totals.projects} projects selected.`);
