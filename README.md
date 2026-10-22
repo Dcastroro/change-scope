@@ -57,6 +57,13 @@ Dirty, staged and untracked files do not enter the committed comparison. The
 configuration is read from the requested head commit, even if another branch
 is checked out locally.
 
+In offline mode, `--config` is the physical JSON file to read. If its logical
+location in the analyzed repository is different from `change-scope.json`, set
+`--policy-path ci/ownership.json`. A change to that exact logical path then
+selects every project, even under an ignored or project-owned directory. The
+flag does not read another file and does not add paths to reports. It is only
+valid with `--changes`; Git mode already derives the logical path from `--config`.
+
 ## Declare ownership
 
 Save this as `change-scope.json` in your monorepo:

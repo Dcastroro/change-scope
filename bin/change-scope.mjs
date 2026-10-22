@@ -14,6 +14,7 @@ Plan affected monorepo projects without running their commands.
 
 Options:
   --config FILE              Default: change-scope.json; committed HEAD config in Git mode
+  --policy-path PATH         Logical policy path for offline mode; default: change-scope.json
   --comparison merge-base|direct   Default: merge-base
   --format text|json|matrix  Default: text; matrix contains configured project IDs only
   --fail-if-affected         Exit 1 for a valid nonempty plan
@@ -55,7 +56,7 @@ try {
       const key = args[index];
       if (options.has(key)) fail('usage');
       if (key === '--fail-if-affected') options.set(key, true);
-      else if (['--config', '--changes', '--base', '--head', '--repo', '--comparison', '--format'].includes(key)) {
+      else if (['--config', '--changes', '--base', '--head', '--repo', '--comparison', '--format', '--policy-path'].includes(key)) {
         const value = args[++index];
         if (typeof value !== 'string' || !value || value.startsWith('--')) fail('usage');
         options.set(key, value);
@@ -67,8 +68,9 @@ try {
     let plan;
     if (options.has('--changes')) {
       if (['--base', '--head', '--repo', '--comparison'].some(key => options.has(key))) fail('usage');
-      plan = planImpact(readJson(configPath, LIMITS.configBytes), readJson(options.get('--changes'), LIMITS.changeBytes));
+      plan = planImpact(readJson(configPath, LIMITS.configBytes), readJson(options.get('--changes'), LIMITS.changeBytes), { configPath: options.get('--policy-path') });
     } else {
+      if (options.has('--policy-path')) fail('usage');
       if (!options.has('--base')) fail('usage');
       plan = planGit({ repo: options.get('--repo') ?? '.', base: options.get('--base'), head: options.get('--head') ?? 'HEAD', configPath, comparison: options.get('--comparison') ?? 'merge-base' });
     }

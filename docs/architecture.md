@@ -51,8 +51,13 @@ The configured logical policy path (default `change-scope.json`), root
 `package.json`, `package-lock.json`, `npm-shrinkwrap.json`, `pnpm-lock.yaml`,
 `pnpm-workspace.yaml`, `yarn.lock`, `bun.lock`, `bun.lockb`, and `.github/`.
 Git mode supplies the selected policy's repository-relative path automatically.
-For offline CLI policies stored elsewhere, declare that logical path explicitly
-in `globalInputs`; the default logical policy name is `change-scope.json`.
+For offline CLI policies stored elsewhere, use `--policy-path` to supply that
+repository-relative logical file path, independently of the physical `--config`
+input. It uses the existing library `configPath` option and exact-file matching;
+the default remains `change-scope.json`. It takes precedence over ignore and
+ownership rules, including with strict unmapped handling. Alternatively, declare
+extra policy files in `globalInputs`. Git mode rejects `--policy-path` because
+its existing `--config` already identifies the committed logical path.
 
 ## Resource limits and cost
 
