@@ -1,5 +1,9 @@
 # Diagnostics and exit codes
 
+`validate` exits `0` with a count-only JSON result for a valid local policy.
+It accepts only `--config`; planning flags return `usage`. Validation failures
+use exit `2` and the same diagnostic codes as planning.
+
 Planning returns exit `0`, including a valid empty plan. With
 `--fail-if-affected`, a nonempty valid plan returns `1`. Every input/operation
 failure returns `2` and a JSON object such as:
