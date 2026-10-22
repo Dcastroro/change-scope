@@ -45,12 +45,23 @@ without changed filenames or file contents.
 # Explicit JSON inputs, without Git access
 node bin/change-scope.mjs plan --config examples/monorepo.json --changes examples/changes.json
 
+# Validate the complete policy without Git or a changes file
+node bin/change-scope.mjs validate --config examples/monorepo.json
+
 # Committed configuration and changes from a feature branch's merge base
 node bin/change-scope.mjs plan --repo /path/to/monorepo --base origin/main --head HEAD --format json
 
 # Compare two exact commit trees instead
 node bin/change-scope.mjs plan --base HEAD~1 --head HEAD --comparison direct --format matrix
 ```
+
+`validate` reads the local policy (default `change-scope.json`) and checks the
+complete project graph, including cycles, unknown dependencies, selectors and
+resource limits. It needs neither Git nor a changes file. Success exits 0 and
+returns only `{"version":1,"valid":true,"projects":N}`; input errors exit 2 with
+the existing fixed JSON diagnostic. Only `--config` is accepted. This validates
+the local file, not the policy stored in a particular commit, and does not prove
+that dependency declarations cover every real dependency in your repository.
 
 Git mode never fetches missing history. Prepare the required commits separately.
 Dirty, staged and untracked files do not enter the committed comparison. The

@@ -1,5 +1,15 @@
 # CI integration
 
+To check a local policy before preparing Git history or a changes list, run:
+
+```sh
+node tools/change-scope/bin/change-scope.mjs validate --config change-scope.json
+```
+
+Keep its exit status: invalid configuration or a broken dependency graph must
+block the pipeline. Validation reads the working-tree file; committed planning
+still reads the requested head policy and performs its own full validation.
+
 Vendor a reviewed Change Scope release into `tools/change-scope` in the
 repository you want to analyze. The monorepo owns its `change-scope.json` policy.
 The example below selects work for a pull request and passes shards to your
