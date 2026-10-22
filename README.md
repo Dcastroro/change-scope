@@ -105,6 +105,11 @@ const committed = planGit({ repo: '.', base: 'origin/main', head: 'HEAD' });
 console.log(committed.comparison); // resolved commit hashes, no raw refs
 ```
 
+JavaScript callers must supply dense `dependsOn` arrays with an own value at
+every index. Holes, including entries supplied only by an array prototype,
+are rejected with `invalid-dependency`. Omitted dependencies and empty arrays
+remain valid. JSON files cannot represent array holes.
+
 `--format matrix` returns only a GitHub-compatible `include` object. Each shard
 contains at most 64 project IDs. A 10,000-project selection produces 157 jobs,
 without dropping projects. Use a concurrency limit when consuming it.
