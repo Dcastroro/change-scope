@@ -15,7 +15,7 @@ Plan affected monorepo projects without running their commands.
 Options:
   --config FILE              Default: change-scope.json; committed HEAD config in Git mode
   --comparison merge-base|direct   Default: merge-base
-  --format text|json|matrix  Default: text; matrix contains configured project IDs only
+  --format text|json|matrix|summary  Default: text; summary contains counts only
   --fail-if-affected         Exit 1 for a valid nonempty plan
   --help                    Show help
   --version                 Show version
@@ -62,7 +62,7 @@ try {
       } else fail('usage');
     }
     const format = options.get('--format') ?? 'text';
-    if (!['text', 'json', 'matrix'].includes(format)) fail('usage');
+    if (!['text', 'json', 'matrix', 'summary'].includes(format)) fail('usage');
     const configPath = options.get('--config') ?? 'change-scope.json';
     let plan;
     if (options.has('--changes')) {
@@ -73,6 +73,7 @@ try {
       plan = planGit({ repo: options.get('--repo') ?? '.', base: options.get('--base'), head: options.get('--head') ?? 'HEAD', configPath, comparison: options.get('--comparison') ?? 'merge-base' });
     }
     if (format === 'json') console.log(JSON.stringify(plan, null, 2));
+    else if (format === 'summary') console.log(JSON.stringify({ version: plan.version, ok: plan.ok, mode: plan.mode, totals: plan.totals, batchCount: plan.batches.length, shardCount: plan.matrix.include.length }));
     else if (format === 'matrix') console.log(JSON.stringify(plan.matrix));
     else {
       console.log(`Change Scope: ${plan.mode}; ${plan.totals.selected}/${plan.totals.projects} projects selected.`);

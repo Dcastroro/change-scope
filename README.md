@@ -50,7 +50,16 @@ node bin/change-scope.mjs plan --repo /path/to/monorepo --base origin/main --hea
 
 # Compare two exact commit trees instead
 node bin/change-scope.mjs plan --base HEAD~1 --head HEAD --comparison direct --format matrix
+
+# Counts only: no project IDs, changed paths or resolved commits
+node bin/change-scope.mjs plan --config examples/monorepo.json --changes examples/changes.json --format summary
 ```
+
+`--format summary` returns JSON with `version`, `ok`, `mode`, the full `totals`
+counts, `batchCount` and `shardCount`. It uses the same plan and validation as
+the other formats, including strict unmapped handling and `--fail-if-affected`.
+It omits project IDs, dependency reasons, paths and Git commit hashes. The
+summary describes the selection; use full JSON or matrix output to execute it.
 
 Git mode never fetches missing history. Prepare the required commits separately.
 Dirty, staged and untracked files do not enter the committed comparison. The
