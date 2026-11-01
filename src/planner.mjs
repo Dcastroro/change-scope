@@ -67,6 +67,11 @@ function compile(config, configPath) {
     if (!Array.isArray(dependencies)) fail('invalid-dependency');
     edges += dependencies.length;
     if (edges > LIMITS.edges) fail('edge-limit');
+    // some() skips holes and can read inherited entries. Require own slots
+    // after the edge budget check, before inspecting dependency values.
+    for (let index = 0; index < dependencies.length; index += 1) {
+      if (!Object.hasOwn(dependencies, index)) fail('invalid-dependency');
+    }
     if (dependencies.some(id => typeof id !== 'string' || !idPattern.test(id))
       || new Set(dependencies).size !== dependencies.length) fail('invalid-dependency');
     for (const dependency of dependencies) account(dependency);
