@@ -1,5 +1,12 @@
 # CI integration
 
+For count-only logs or dashboards, use `plan ... --format summary`. Its JSON
+contains `version`, `ok`, `mode`, `totals`, `batchCount` and `shardCount`, without
+project IDs or Git commit hashes. `batchCount` counts dependency-aware groups;
+`shardCount` counts CI shards and does not imply execution order. Keep checking
+the process exit status: `--fail-if-affected` and validation failures retain
+their normal exit codes. A summary is not a matrix or an executable project list.
+
 To check a local policy before preparing Git history or a changes list, run:
 
 ```sh

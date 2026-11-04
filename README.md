@@ -58,6 +58,12 @@ node bin/change-scope.mjs plan --base HEAD~1 --head HEAD --comparison direct --f
 node bin/change-scope.mjs plan --config examples/monorepo.json --changes examples/changes.json --format summary
 ```
 
+`--format summary` returns JSON with `version`, `ok`, `mode`, the full `totals`
+counts, `batchCount` and `shardCount`. It uses the same plan and validation as
+the other formats, including strict unmapped handling and `--fail-if-affected`.
+It omits project IDs, dependency reasons, paths and Git commit hashes. The
+summary describes the selection; use full JSON or matrix output to execute it.
+
 `validate` reads the local policy (default `change-scope.json`) and checks the
 complete project graph, including cycles, unknown dependencies, selectors and
 resource limits. It needs neither Git nor a changes file. Success exits 0 and
