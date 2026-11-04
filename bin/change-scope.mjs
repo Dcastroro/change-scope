@@ -82,6 +82,7 @@ try {
     }
     if (command === 'validate') console.log(JSON.stringify({ version: 1, valid: true, projects: plan.totals.projects }));
     else if (format === 'json') console.log(JSON.stringify(plan, null, 2));
+    else if (format === 'summary') console.log(JSON.stringify({ version: plan.version, ok: plan.ok, mode: plan.mode, totals: plan.totals, batchCount: plan.batches.length, shardCount: plan.matrix.include.length }));
     else if (format === 'matrix') console.log(JSON.stringify(plan.matrix));
     else {
       console.log(`Change Scope: ${plan.mode}; ${plan.totals.selected}/${plan.totals.projects} projects selected.`);
